@@ -6,14 +6,8 @@ import { Link } from "react-router-dom";
 
 export default function RegisterPage() {
   return (
-    <AuthLayouts title='Register'>
+    <AuthLayouts title='Register' type='register'>
       <FormRegister />
-      <p className='text-sm w-full'>
-        Have an account?
-        <Link className='font-bold text-blue-500' to='/login'>
-          Login
-        </Link>
-      </p>
     </AuthLayouts>
   );
 }
