@@ -25,7 +25,6 @@ export default function FormRegister() {
         type='password'
       />
       <Button classname='bg-blue-600 w-full'>Register</Button>
-      <Button classname='bg-blue-600 w-full'>Login</Button>
     </form>
   );
 }
