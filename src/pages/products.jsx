@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import CardProducts from "../components/Fragments/CardProducts.jsx";
 import Button from "../components/Elements/Button/index.jsx";
 
@@ -8,7 +8,7 @@ const products = [
     title: "Nike Air Jordan Blue - Water Hashira Edition",
     description:
       "This is a limited edition Nike Air Jordan shoes inspired by the Water Hashira from Demon Slayer. Perfect for collectors and fans alike.",
-    price: "Rp. 1.000.000",
+    price: 2000000,
     image: "/images/shoes.jpg",
   },
   {
@@ -16,7 +16,7 @@ const products = [
     title: "Copy of Nike Air Jordan",
     description:
       "This is a copy of the Nike Air Jordan shoes, designed to look similar but at a more affordable price.",
-    price: "Rp. 1.000.000",
+    price: 1500000,
     image: "/images/shoes.jpg",
   },
   {
@@ -24,7 +24,7 @@ const products = [
     title: "Nike Air Jordan Blue - Water Hashira Edition",
     description:
       "This is a limited edition Nike Air Jordan shoes inspired by the Water Hashira from Demon Slayer. Perfect for collectors and fans alike.",
-    price: "Rp. 1.000.000",
+    price: 1000000,
     image: "/images/shoes.jpg",
   },
 ];
@@ -32,10 +32,27 @@ const products = [
 const email = localStorage.getItem("email");
 
 export default function ProductsPage() {
+  const [cart, setCart] = useState([
+    {
+      id: 1,
+      qty: 1,
+    },
+  ]);
+
   const handleLogout = () => {
     localStorage.removeItem("email");
     localStorage.removeItem("password");
     window.location.href = "/login";
+  };
+
+  const handleAddToCart = (id) => {
+    if (cart.find((item) => item.id === id)) {
+      setCart(
+        cart.map((item) => (item.id === id ? { ...item, qty: item.qty + 1 } : item))
+      );
+    } else {
+      setCart([...cart, { id, qty: 1 }]);
+    }
   };
   return (
     <Fragment>
@@ -49,15 +66,60 @@ export default function ProductsPage() {
         </Button>
       </div>
       <div className='flex justify-center py-5'>
-        {products.map((product) => (
-          <CardProducts key={product.id}>
-            <CardProducts.Header image={product.image} />
-            <CardProducts.Body title={product.title}>
-              {product.description}
-            </CardProducts.Body>
-            <CardProducts.Footer price={product.price}></CardProducts.Footer>
-          </CardProducts>
-        ))}
+        <div className='w-2/3 flex flex-wrap'>
+          {products.map((product) => (
+            <CardProducts key={product.id}>
+              <CardProducts.Header image={product.image} />
+              <CardProducts.Body title={product.title}>
+                {product.description}
+              </CardProducts.Body>
+              <CardProducts.Footer
+                id={product.id}
+                price={product.price}
+                handleAddToCart={handleAddToCart}
+              />
+            </CardProducts>
+          ))}
+        </div>
+        <div className='w-1/3'>
+          <h1 className='text-3xl font-bold text-blue-600 ml-5 mb2'>Cart</h1>
+
+          <table className='text-left table-auto border-separate border-spacing-x-5'>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cart.map((item) => {
+                const product = products.find((product) => product.id === item.id);
+                return (
+                  <tr key={item.id}>
+                    <td>{product.title}</td>
+                    <td>
+                      Rp.{" "}
+                      {product.price.toLocaleString("id-ID", {
+                        styles: "currency",
+                        currency: "IDR",
+                      })}
+                    </td>
+                    <td>{item.qty}</td>
+                    <td>
+                      Rp.{" "}
+                      {(item.qty * product.price).toLocaleString("id-ID", {
+                        styles: "currency",
+                        currency: "IDR",
+                      })}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
     </Fragment>
   );
