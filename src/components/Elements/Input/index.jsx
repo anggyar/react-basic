@@ -3,11 +3,16 @@ import Input from "./Input.jsx";
 import Label from "./Label.jsx";
 
 export default function InputForm(props) {
-  const { label, name, placeholder, type } = props;
+  const { label, name, placeholder, type, ref } = props;
   return (
-    <div className="mb-6">
+    <div className='mb-6'>
       <Label htmlFor={name}>{label}</Label>
-      <Input type={type} placeholder={placeholder} name={name} />
+      <Input
+        type={type}
+        placeholder={placeholder}
+        name={name}
+        ref={ref}
+      />
     </div>
   );
 }

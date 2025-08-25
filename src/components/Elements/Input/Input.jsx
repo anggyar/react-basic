@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function Input(props) {
-  const { type, placeholder, name } = props;
+  const { type, placeholder, name, ref } = props;
   return (
     <>
       <input
@@ -10,6 +10,7 @@ export default function Input(props) {
         placeholder={placeholder}
         name={name}
         id={name}
+        ref={ref}
       />
     </>
   );
