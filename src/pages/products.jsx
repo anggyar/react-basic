@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import CardProducts from "../components/Fragments/CardProducts.jsx";
 import Button from "../components/Elements/Button/index.jsx";
 import { getProductDatas } from "../services/product.service.jsx";
+import { getUsername } from "../services/auth.service.js";
 
 // const products = [
 //   {
@@ -30,12 +31,11 @@ import { getProductDatas } from "../services/product.service.jsx";
 //   },
 // ];
 
-const email = localStorage.getItem("email");
-
 export default function ProductsPage() {
   const [cart, setCart] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [products, setProducts] = useState([]);
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
     setCart(JSON.parse(localStorage.getItem("cart")) || []);
@@ -45,6 +45,14 @@ export default function ProductsPage() {
     getProductDatas((data) => {
       setProducts(data);
     });
+  });
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setUsername(getUsername(token));
+    } else {
+      window.location.href = "/login";
+    }
   }, []);
 
   useEffect(() => {
@@ -59,7 +67,7 @@ export default function ProductsPage() {
   }, [cart, products]);
 
   const handleLogout = () => {
-    localStorage.removeItem("email");
+    localStorage.removeItem("token");
     localStorage.removeItem("password");
     localStorage.removeItem("cart");
     window.location.href = "/login";
@@ -84,7 +92,7 @@ export default function ProductsPage() {
   return (
     <Fragment>
       <div className='flex justify-end h-10 bg-blue-600 text-white items-center px-10'>
-        {email}
+        {username}
         <Button
           classname='ml-5 bg-black'
           onClick={handleLogout}
