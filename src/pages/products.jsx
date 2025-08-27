@@ -1,10 +1,11 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import CardProducts from "../components/Fragments/CardProducts.jsx";
 import Button from "../components/Elements/Button/index.jsx";
 import { getProductDatas } from "../services/product.service.js";
 import { useLogin } from "../hooks/useLogin.jsx";
 import TableCart from "../components/Fragments/TableCart.jsx";
 import NavbarLayout from "../components/Layouts/NavbarLayout.jsx";
+import { Darkmode } from "../context/DarkMode.jsx";
 
 // const products = [
 //   {
@@ -34,6 +35,7 @@ import NavbarLayout from "../components/Layouts/NavbarLayout.jsx";
 // ];
 export default function ProductsPage() {
   // const [cart, setCart] = useState([]);
+  const { isDarkMode } = useContext(Darkmode);
 
   const [products, setProducts] = useState([]);
 
@@ -67,7 +69,7 @@ export default function ProductsPage() {
   return (
     <Fragment>
       <NavbarLayout />
-      <div className='flex justify-center py-5'>
+      <div className={`flex justify-center py-5 ${isDarkMode && "bg-slate-700"}`}>
         <div className='w-2/3 flex flex-wrap'>
           {products.length > 0 &&
             products.map((product) => (

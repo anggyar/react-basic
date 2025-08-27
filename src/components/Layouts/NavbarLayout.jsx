@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Button from "../Elements/Button/index.jsx";
 import { useLogin } from "../../hooks/useLogin.jsx";
 import { useSelector } from "react-redux";
+import { Darkmode } from "../../context/DarkMode.jsx";
+import { useTotalPrice } from "../../context/totalPriceContext.jsx";
 
 const NavbarLayout = () => {
+  const { isDarkMode, setIsDarkMode } = useContext(Darkmode);
+  const { total } = useTotalPrice();
+
   const username = useLogin();
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -31,7 +36,15 @@ const NavbarLayout = () => {
       >
         Logout
       </Button>
-      <div className='flex items-center bg-gray-800 p-2 rounded-md ml-5'>{totalCart}</div>
+      <div className='flex items-center bg-gray-800 p-2 rounded-md mx-5'>
+        Item: {totalCart} | Price {total}
+      </div>
+      <Button
+        className='ml-5 bg-black'
+        onClick={() => setIsDarkMode(!isDarkMode)}
+      >
+        {isDarkMode ? "Light" : "Dark"}
+      </Button>
     </div>
   );
 };
